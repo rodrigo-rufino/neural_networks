@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import data.csv_manager as csv_manager
+import data.data_manager as data_manager
 import util.util_math as math_util
 
 class Perceptron:
@@ -46,12 +46,12 @@ class Perceptron:
 
 
 if __name__=="__main__":
-    csv_manager = csv_manager.CSVManager()
+    data_manager = data_manager.DataManager()
 
     dataset_name = 'iris'
 
-    dataset = csv_manager.dataset_input(dataset_name)
-    output = csv_manager.dataset_output(dataset_name)
+    dataset = data_manager.dataset_input(dataset_name)
+    output = data_manager.dataset_output(dataset_name)
 
     network = Perceptron()
     w = network.train(dataset, output)

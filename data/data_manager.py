@@ -1,9 +1,10 @@
 import csv
 import os
 
-class CSVManager:
+class DataManager:
     def __init__(self):
         pass
+
 
     def csv_to_list(self, folder, filename):
         csv_file = os.path.join(os.path.dirname(__file__), folder, filename)
@@ -18,8 +19,10 @@ class CSVManager:
                 dataset.append(row)
         return dataset
 
+
     def dataset_input(self, dataset_name):
         return self.csv_to_list(dataset_name, dataset_name + '_input.csv')
+
 
     def dataset_output(self, dataset_name):
         return self.csv_to_list(dataset_name, dataset_name + '_output.csv')
