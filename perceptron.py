@@ -9,7 +9,7 @@ class Perceptron:
 
     def __init__(self):
         self.bias = -1.0
-        self.learning_rate = 0.0001
+        self.learning_rate = 0.01
         self.act_function = util_math.sign_function
 
     def add_bias(self, dataset):
@@ -37,11 +37,38 @@ class Perceptron:
 
         return w
 
-    def test(self, w, data):
-        v = np.dot(np.transpose(w), data)
-        y = self.act_function(v)
-        return y
+    def test(self, w, dataset_test):
 
+        correct = 0
+        
+        for i in range (0, len(dataset_test)):
+            v = np.dot(np.transpose(w), dataset_test[i])
+            y = self.act_function(v)
+            # print("Dataset - {}".format(dataset_test[i]))
+            if y == output_test[i]:
+                correct += 1
+                if y == -1: 
+                    plt.plot(dataset_test[i][1], dataset_test[i][2], 'ro')
+                else: 
+                    plt.plot(dataset_test[i][1], dataset_test[i][2], 'bo')
+            else:
+                plt.plot(dataset_test[i][1], dataset_test[i][2], 'yx')
+        accuracy = 100.0 * float(correct) / float(len(dataset_test))
+        print('accuracy: {}/{} ({:.2f}%)'.format(correct, len(dataset_test), accuracy))
+
+        x_list, y_list = [], []
+        for row in dataset_test:
+            x_list.append(row[1])
+            y_list.append(row[2])
+
+        x_limit = max(x_list)+max(x_list)*0.1
+        y_limit = max(y_list)+max(y_list)*0.1
+        
+        axes = plt.gca()
+        axes.set_xlim([0,x_limit])
+        axes.set_ylim([0,y_limit])
+
+        plt.show()
 
 if __name__=="__main__":
     data_manager = data_manager.DataManager()
@@ -59,20 +86,4 @@ if __name__=="__main__":
     output, output_test = output[:dataset_half], output[-dataset_half:]
 
     w = network.train(dataset, output)
-    plt.show()
-
-    correct = 0
-    for i in range (0, len(dataset_test)):
-        y = network.test(w, dataset_test[i])
-        # print("Dataset - {}".format(dataset_test[i]))
-        if y == output_test[i]:
-            correct += 1
-            if y == -1: 
-                plt.plot(dataset_test[i][1], dataset_test[i][2], 'ro')
-            else: 
-                plt.plot(dataset_test[i][1], dataset_test[i][2], 'bo')
-    
-    accuracy = 100.0 * float(correct) / float(len(dataset_test))
-    print('accuracy: {}/{} ({:.2f}%)'.format(correct, len(dataset_test), accuracy))
-
-    plt.show()
+    network.test(w, dataset_test)
